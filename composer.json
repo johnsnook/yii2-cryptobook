@@ -1,0 +1,21 @@
+{
+    "name": "johnsnook/yii2-cryptobook",
+    "description": "Every wanted to write a book where the chapter titles and contents are entirely encrypted?  Probably not, but I did, so I wrote this.",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"," encryption"," book"],
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "John Michael Snook",
+            "email": "jsnook@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "johnsnook\\cryptobook\\": ""
+        }
+    }
+}
