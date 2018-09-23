@@ -3,7 +3,6 @@
 namespace johnsnook\cryptobook\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 use yii\helpers\ArrayHelper;
 use Defuse\Crypto\Key;
 
@@ -42,20 +41,9 @@ class Book extends Updatable {
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
-        return ArrayHelper::merge(parent::behaviors(), [[
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title'
-        ]]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules() {
         return ArrayHelper::merge(parent::rules(), [
                     [['title'], 'unique'],
-                    [['slug'], 'unique'],
                     [['key'], 'string'],
                     ['toc', 'each', 'rule' => ['integer']],
         ]);
@@ -74,19 +62,19 @@ class Book extends Updatable {
      * @return \yii\db\ActiveQuery
      */
     public function getChapters() {
-        return $this->hasMany(Chapter::className(), ['slug' => 'book_slug']);
+        return $this->hasMany(Chapter::className(), ['id' => 'book_id']);
     }
 
     /**
      * Retrieves the encryption key from the session, if available
      *
-     * @param string $slug
+     * @param string $id
      * @return boolean
      */
-    public static function getDecryptKey($slug) {
+    public static function getDecryptKey($id) {
         $session = Yii::$app->session;
-        if ($session->has($slug)) {
-            return Key::loadFromAsciiSafeString($session->get($slug));
+        if ($session->has("book-$id")) {
+            return Key::loadFromAsciiSafeString($session->get("book-$id"));
         }
         return false;
     }

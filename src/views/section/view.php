@@ -10,7 +10,7 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['book/index']];
 $this->params['breadcrumbs'][] = [
     'label' => $model->book->title . ' Sections',
-    'url' => ['toc', 'book_slug' => $model->book_slug]
+    'url' => ['index', 'book_id' => $model->book_id]
 ];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

@@ -12,9 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php
     $form = ActiveForm::begin();
-//    $key = KeyProtectedByPassword::createRandomPasswordProtectedKey('shitman');
-//    $model->key = $key->saveToAsciiSafeString();
-    echo $form->field($model, 'title')->textInput();
+    echo $form->field($model, 'title')->textInput(['autocomplete' => "off"]);
     if ($model->isNewRecord) {
         echo $form->field($model, 'key')->passwordInput();
     }
@@ -22,7 +20,6 @@ use yii\widgets\ActiveForm;
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

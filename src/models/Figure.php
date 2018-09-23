@@ -11,7 +11,7 @@ use Yii;
  * @property string $title
  * @property string $created_at
  * @property resource $image
- * @property string $book_slug
+ * @property string $book_id
  */
 class Figure extends Super {
 
@@ -41,10 +41,10 @@ class Figure extends Super {
      */
     public function rules() {
         return ArrayHelper::merge(parent::rules(), [
-                    [['image', 'book_slug'], 'required'],
-                    [['image', 'book_slug'], 'string'],
+                    [['image', 'book_id'], 'required'],
+                    [['image', 'book_id'], 'string'],
                     [['created_at'], 'safe'],
-                    [['book_slug'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_slug' => 'slug']],
+                    [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_id' => 'id']],
         ]);
     }
 
@@ -54,7 +54,7 @@ class Figure extends Super {
     public function attributeLabels() {
         return ArrayHelper::merge(parent::rules(), [
                     'image' => 'Image',
-                    'book_slug' => 'Book Slug',
+                    'book_id' => 'Book Id',
         ]);
     }
 

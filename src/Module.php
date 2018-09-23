@@ -27,8 +27,8 @@ class Module extends \yii\base\Module implements \yii\base\BootstrapInterface {
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
         '/cryptobook' => '/cryptobook/book/index',
-        '/cryptobook/books' => '/cryptobook/book/index',
-        '/cryptobook/book/<book_slug>/toc' => '/cryptobook/chapter/toc',
+        '/cryptobook/<controller>s' => '/cryptobook/<controller>/index',
+//        '/cryptobook/<controller>/<id:\d+>' => '/cryptobook/<controller>/view',
         '/cryptobook/<controller>/<action>/<id:\d+>' => '/cryptobook/<controller>/<action>',
     ];
 

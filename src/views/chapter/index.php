@@ -19,10 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="chapter-index">
     <h1><?= Html::encode($this->title) ?></h2>
         <p>
-            <?= Html::a('New Chapter', ['create', 'book_slug' => $book->slug], ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Update Book', ['book/update', 'slug' => $book->slug], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('New Chapter', ['create', 'book_id' => $book->id], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Update Book', ['book/update', 'id' => $book->id], ['class' => 'btn btn-primary']) ?>
             <?=
-            Html::a('Delete Book', ['book/delete', 'slug' => $book->slug], [
+            Html::a('Delete Book', ['book/delete', 'id' => $book->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
                     'confirm' => 'Are you sure you want to delete this item?',

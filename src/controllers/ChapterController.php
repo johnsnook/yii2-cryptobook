@@ -27,10 +27,13 @@ class ChapterController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
-            'idle' => [
-                'class' => IdleBehavior::className(),
-            ]
+            'idle' => ['class' => IdleBehavior::className()]
         ];
+    }
+
+    public function init() {
+        parent::init();
+        $this->view->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['book/index']];
     }
 
     /**
@@ -56,17 +59,17 @@ class ChapterController extends Controller {
      * Lists all Chapter models.
      * @return mixed
      */
-    public function actionToc($book_slug) {
+    public function actionIndex($book_id) {
         static::prepPage($this->view);
-        if ($answer = BookController::needKey($book_slug)) {
+        if ($answer = BookController::needKey($book_id)) {
             return $answer;
         } else {
-            $book = Book::findOne($book_slug);
+            $book = Book::findOne($book_id);
             $models = Chapter::find()
-                    ->where("book_slug=:slug", [':slug' => $book_slug])
+                    ->where("book_id=:id", [':id' => $book_id])
                     ->all();
             $models = ArrayHelper::index($models, 'id');
-            return $this->render('toc', [
+            return $this->render('index', [
                         'book' => $book,
                         'chapters' => $models,
             ]);
@@ -83,7 +86,7 @@ class ChapterController extends Controller {
         static::prepPage($this->view);
 
         $model = $this->findModel($id);
-        if ($answer = BookController::needKey($model->book_slug)) {
+        if ($answer = BookController::needKey($model->book_id)) {
             return $answer;
         } else {
             $sections = ArrayHelper::index($model->sections, 'id');
@@ -97,25 +100,25 @@ class ChapterController extends Controller {
     /**
      * Creates a new Chapter model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param integer $book_slug
+     * @param integer $book_id
      * @return mixed
      */
-    public function actionCreate($book_slug) {
+    public function actionCreate($book_id) {
         static::prepPage($this->view);
 
-        if ($answer = BookController::needKey($book_slug)) {
+        if ($answer = BookController::needKey($book_id)) {
             return $answer;
         } else {
             $post = static::getPost();
             $model = new Chapter();
             if ($model->load($post)) {
                 if ($model->save()) {
-                    return $this->redirect(['toc', 'book_slug' => $model->book_slug]);
+                    return $this->redirect(['index', 'book_id' => $model->book_id]);
                 }
             }
-            $model->book_slug = $book_slug;
+            $model->book_id = $book_id;
             return $this->render('create', [
-                        'book_slug' => $book_slug,
+                        'book_id' => $book_id,
                         'model' => $model,
             ]);
         }
@@ -144,7 +147,7 @@ class ChapterController extends Controller {
         $post = static::getPost();
         $request = Yii::$app->request;
 //        \johnsnook\cryptobook\d::d($post);
-        if ($answer = BookController::needKey($model->book_slug)) {
+        if ($answer = BookController::needKey($model->book_id)) {
             return $answer;
         } else {
             if ($request->isAjax && $request->isPost) {
@@ -168,13 +171,13 @@ class ChapterController extends Controller {
      */
     public function actionDelete($id) {
         $model = $this->findModel($id);
-        $book_slug = $model->book_slug;
-        if ($answer = BookController::needKey($book_slug)) {
+        $book_id = $model->book_id;
+        if ($answer = BookController::needKey($book_id)) {
             return $answer;
         } else {
             $model->delete();
 
-            return $this->redirect(['toc', 'book_slug' => $book_slug]);
+            return $this->redirect(['index', 'book_id' => $book_id]);
         }
     }
 

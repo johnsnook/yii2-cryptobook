@@ -7,10 +7,9 @@ use johnsnook\cryptobook\models\Chapter;
 /* @var $chapter johnsnook\cryptobook\models\Chapter */
 
 $this->title = $chapter->title;
-$this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['book/index']];
 $this->params['breadcrumbs'][] = [
     'label' => $chapter->book->title . ' Chapters',
-    'url' => ['toc', 'book_slug' => $chapter->book_slug]
+    'url' => ['index', 'book_id' => $chapter->book_id]
 ];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

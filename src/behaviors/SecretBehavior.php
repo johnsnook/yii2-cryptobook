@@ -18,7 +18,7 @@ class SecretBehavior extends \yii\base\Behavior {
     public $secretAttributes = ['title', 'content'];
 
     public function afterFind() {
-        if ($key = Book::getDecryptKey($this->book_slug)) {
+        if ($key = Book::getDecryptKey($this->book_id)) {
             try {
                 $this->title = Crypto::decrypt($this->title, $key);
                 $this->content = Crypto::decrypt($this->content, $key);
@@ -31,7 +31,7 @@ class SecretBehavior extends \yii\base\Behavior {
     }
 
     public function beforeSave($insert) {
-        if (parent::beforeSave($insert) && ($key = Book::getDecryptKey($this->book_slug))) {
+        if (parent::beforeSave($insert) && ($key = Book::getDecryptKey($this->book_id))) {
             try {
                 $this->title = Crypto::encrypt($this->title, $key);
                 $this->content = Crypto::encrypt($this->content, $key);

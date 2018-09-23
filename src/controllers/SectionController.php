@@ -54,14 +54,14 @@ class SectionController extends Controller {
     /**
      * Creates a new Chapter model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param integer $book_slug
+     * @param integer $book_id
      * @return mixed
      */
     public function actionCreate($chapter_id) {
         static::prepPage($this->view);
 
         $chapter = Chapter::findOne($chapter_id);
-        if ($answer = BookController::needKey($chapter->book_slug)) {
+        if ($answer = BookController::needKey($chapter->book_id)) {
             return $answer;
         } else {
             $post = Yii::$app->request->post();
@@ -93,7 +93,7 @@ class SectionController extends Controller {
         $post = static::getPost();
         $request = Yii::$app->request;
 //        \johnsnook\cryptobook\d::d($post);
-        if ($answer = BookController::needKey($model->book_slug)) {
+        if ($answer = BookController::needKey($model->book_id)) {
             return $answer;
         } else {
             if ($request->isAjax && $request->isPost) {
@@ -117,13 +117,13 @@ class SectionController extends Controller {
      */
     public function actionDelete($id) {
         $model = $this->findModel($id);
-        $book_slug = $model->book_slug;
-        if ($answer = BookController::needKey($book_slug)) {
+        $book_id = $model->book_id;
+        if ($answer = BookController::needKey($book_id)) {
             return $answer;
         } else {
             $model->delete();
 
-            return $this->redirect(['toc', 'book_slug' => $book_slug]);
+            return $this->redirect(['index', 'book_id' => $book_id]);
         }
     }
 

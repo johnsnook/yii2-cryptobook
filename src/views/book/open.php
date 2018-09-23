@@ -10,7 +10,7 @@ use Defuse\Crypto\KeyProtectedByPassword;
 $this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['book/index']];
 $this->params['breadcrumbs'][] = [
     'label' => $model->title . ' Passphrase',
-    'url' => ['toc', 'book_slug' => $model->slug]
+    'url' => ['index', 'book_id' => $model->id]
 ];
 ?>
 
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = [
     $form = ActiveForm::begin(['layout' => 'horizontal']);
     echo $form->field($model, 'title')->textInput()->staticControl();
     echo $form->field($model, 'passphrase')->passwordInput(['autofocus' => true]);
-    echo $form->field($model, 'slug')->hiddenInput()->label(false);
+    echo $form->field($model, 'id')->hiddenInput()->label(false);
     ?>
     <input name="request" type="hidden" value="<?= $request; ?>">
     <div class="form-group ">

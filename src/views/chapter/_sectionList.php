@@ -26,7 +26,7 @@ foreach ($chapter->toc as $key) {
     $section = $sections[$key];
     $content = '';
 
-    $content .= Html::beginTag('span', ['class' => ' ']);
+    $content .= Html::beginTag('span', ['style' => 'padding-right:5px ']);
     $content .= Html::a(Html::tag('i', '', [
                         'class' => 'glyphicon glyphicon-move drag-handle',
                         'data-toggle' => 'tooltip',
@@ -41,7 +41,18 @@ foreach ($chapter->toc as $key) {
                         'class' => 'glyphicon glyphicon-pencil',
                         'data-toggle' => 'tooltip',
                         'title' => 'Edit section'
-                    ]), ['update', 'id' => $section->id]);
+                    ]), ['section/update', 'id' => $section->id]);
+    $content .= ' ' . Html::a(Html::tag('i', '', [
+                        'class' => 'glyphicon glyphicon-trash',
+                        'data-toggle' => 'tooltip',
+                        'title' => 'Delete section'
+                    ]), ['section/delete', 'id' => $section->id], [
+                'class' => ' text-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+    ]);
     $content .= Html::endTag('span');
 
     $content .= Html::beginTag('strong');

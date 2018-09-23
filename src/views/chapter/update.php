@@ -7,10 +7,9 @@ use yii\helpers\Html;
 
 $this->title = 'Update Chapter: ' . $model->title;
 $this->title = $model->book->title . ' - Table of Contents';
-$this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['book/index']];
 $this->params['breadcrumbs'][] = [
     'label' => $model->book->title . ' Chapters',
-    'url' => ['toc', 'book_slug' => $model->book_slug]
+    'url' => ['index', 'book_id' => $model->book_id]
 ];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

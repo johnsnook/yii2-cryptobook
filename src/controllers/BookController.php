@@ -45,10 +45,10 @@ class BookController extends Controller {
         ]);
     }
 
-    public function actionReindex($slug, $toc) {
+    public function actionReindex($id, $toc) {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($slug);
+        $model = $this->findModel($id);
         $model->toc = explode(',', $toc);
         $model->save(FALSE);
         return ['success' => true];
@@ -69,7 +69,7 @@ class BookController extends Controller {
             $key = KeyProtectedByPassword::createRandomPasswordProtectedKey($model->key);
             $model->key = $key->saveToAsciiSafeString();
             if ($model->save()) {
-                return $this->redirect(['chapter/toc', 'book_slug' => $model->slug]);
+                return $this->redirect(['chapters', 'book_id' => $model->id]);
             }
         }
 
@@ -78,12 +78,13 @@ class BookController extends Controller {
         ]);
     }
 
-    public function actionOpen($slug, $request) {
-        $model = $this->findModel($slug);
+    public function actionOpen($id, $request) {
+        $model = $this->findModel($id);
+        $bkSesh = "book-$model->id";
 
         /** if we already have the key in the session, skip this step */
         $session = Yii::$app->session;
-        if ($session->has($model->slug)) {
+        if ($session->has($bkSesh)) {
             return $this->redirect($request);
         }
 
@@ -96,7 +97,7 @@ class BookController extends Controller {
             $protected_key = KeyProtectedByPassword::loadFromAsciiSafeString($model->key);
             try {
                 $keyObj = $protected_key->unlockKey($passphrase);
-                $session->set($model->slug, $keyObj->saveToAsciiSafeString());
+                $session->set($bkSesh, $keyObj->saveToAsciiSafeString());
                 return $this->redirect($request);
             } catch (WrongKeyOrModifiedCiphertextException $ex) {
                 $session->setFlash('warning', "Passphrase is incorrect.  Please enter the correct passphrase. " . $ex->getMessage());
@@ -113,18 +114,18 @@ class BookController extends Controller {
      * check if we have a decrypt key stored in the session.  If not, redirect
      * them to reenter it
      *
-     * @param string $book_slug
+     * @param string $id
      * @return mixed
      */
-    public static function needKey($book_slug) {
-        if (false === Book::getDecryptKey($book_slug)) {
+    public static function needKey($id) {
+        if (false === Book::getDecryptKey($id)) {
             $post = Yii::$app->request->post();
             if (!empty($post)) {
                 Yii::$app->session->set('chapterPost', $post);
             }
             return static::redirect([
                         'book/open',
-                        'slug' => $book_slug,
+                        'id' => $id,
                         'request' => \Yii::$app->request->url
             ]);
         }
@@ -134,15 +135,15 @@ class BookController extends Controller {
     /**
      * Updates an existing Book model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $slug
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($slug) {
-        if (!Yii::$app->session->has($slug)) {
+    public function actionUpdate($id) {
+        if (!Yii::$app->session->has("book-$id")) {
             return $this->redirect(['index']);
         }
-        $model = $this->findModel($slug);
+        $model = $this->findModel($id);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -150,7 +151,7 @@ class BookController extends Controller {
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['chapter/toc', 'book_slug' => $model->slug]);
+            return $this->redirect(['chapters', 'book_id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -161,15 +162,15 @@ class BookController extends Controller {
     /**
      * Deletes an existing Book model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $slug
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($slug) {
-        if (!$session->has($slug)) {
+    public function actionDelete($id) {
+        if (!$session->has("book-$id")) {
             return $this->redirect(['index']);
         }
-        $this->findModel($slug)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -187,12 +188,12 @@ class BookController extends Controller {
     /**
      * Finds the Book model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $slug
+     * @param integer $id
      * @return Book the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($slug) {
-        if (($model = Book::findOne($slug)) !== null) {
+    protected function findModel($id) {
+        if (($model = Book::findOne($id)) !== null) {
             return $model;
         }
 

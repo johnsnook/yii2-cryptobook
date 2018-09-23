@@ -9,7 +9,7 @@ $this->title = 'Create Section';
 $this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['book/index']];
 $this->params['breadcrumbs'][] = [
     'label' => $model->chapter->book->title,
-    'url' => ['chapter/toc', 'book_slug' => $model->chapter->book_slug]
+    'url' => ['chapters', 'book_id' => $model->chapter->book_id]
 ];
 $this->params['breadcrumbs'][] = [
     'label' => $model->chapter->title,

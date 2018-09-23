@@ -11,7 +11,7 @@ use Yii;
  * @property string $title
  * @property string $created_at
  * @property string $url
- * @property string $book_slug
+ * @property string $book_id
  */
 class Bibliography extends Super {
 
@@ -27,10 +27,10 @@ class Bibliography extends Super {
      */
     public function rules() {
         return [
-            [['title', 'url', 'book_slug'], 'required'],
-            [['title', 'url', 'book_slug'], 'string'],
+            [['title', 'url', 'book_id'], 'required'],
+            [['title', 'url', 'book_id'], 'string'],
             [['created_at'], 'safe'],
-            [['book_slug'], 'exist', 'skipOnError' => true, 'targetClass' => BookBook::className(), 'targetAttribute' => ['book_slug' => 'slug']],
+            [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => BookBook::className(), 'targetAttribute' => ['book_id' => 'id']],
         ];
     }
 
@@ -43,7 +43,7 @@ class Bibliography extends Super {
             'title' => 'Title',
             'created_at' => 'Created At',
             'url' => 'Url',
-            'book_slug' => 'Book Slug',
+            'book_id' => 'Book Id',
         ];
     }
 

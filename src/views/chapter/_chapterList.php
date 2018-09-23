@@ -16,7 +16,7 @@ use yii\jui\Sortable;
 
 TocAsset::register($this);
 $this->registerJsVar('toc', $book->toc->getValue());
-$this->registerJsVar('reindexUrl', Url::toRoute(['book/reindex', 'slug' => $book->slug]));
+$this->registerJsVar('reindexUrl', Url::toRoute(['book/reindex', 'id' => $book->id]));
 
 $items = [];
 $i = 1;

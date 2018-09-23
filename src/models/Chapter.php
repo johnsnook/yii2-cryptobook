@@ -19,7 +19,7 @@ use \yii\helpers\ArrayHelper;
  * @property int $updated_by
  * @property string $content
  * @property int[] $toc
- * @property string $book_slug
+ * @property string $book_id
  * @property Section[] $chapters
  */
 class Chapter extends Updatable {
@@ -44,10 +44,10 @@ class Chapter extends Updatable {
      */
     public function rules() {
         return ArrayHelper::merge(parent::rules(), [
-                    [['book_slug'], 'required'],
-                    [['book_slug', 'content'], 'string'],
-                    [['book_slug'], 'default', 'value' => null],
-                    [['book_slug'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_slug' => 'slug']],
+                    [['book_id'], 'required'],
+                    [['content'], 'string'],
+                    [['book_id'], 'default', 'value' => null],
+                    [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_id' => 'id']],
         ]);
     }
 
@@ -56,13 +56,13 @@ class Chapter extends Updatable {
      */
     public function attributeLabels() {
         return ArrayHelper::merge(parent::attributeLabels(), [
-                    'book_slug' => 'Book ID',
+                    'book_id' => 'Book ID',
                     'content' => 'Content',
         ]);
     }
 
     public function afterFind() {
-        if ($key = Book::getDecryptKey($this->book_slug)) {
+        if ($key = Book::getDecryptKey($this->book_id)) {
             try {
                 $this->title = Crypto::decrypt($this->title, $key);
                 $this->content = Crypto::decrypt($this->content, $key);
@@ -75,7 +75,7 @@ class Chapter extends Updatable {
     }
 
     public function beforeSave($insert) {
-        if (parent::beforeSave($insert) && ($key = Book::getDecryptKey($this->book_slug))) {
+        if (parent::beforeSave($insert) && ($key = Book::getDecryptKey($this->book_id))) {
             try {
                 $this->title = Crypto::encrypt($this->title, $key);
                 $this->content = Crypto::encrypt($this->content, $key);
@@ -105,7 +105,7 @@ class Chapter extends Updatable {
      * @return \yii\db\ActiveQuery
      */
     public function getBook() {
-        return $this->hasOne(Book::className(), ['slug' => 'book_slug']);
+        return $this->hasOne(Book::className(), ['id' => 'book_id']);
     }
 
     /**

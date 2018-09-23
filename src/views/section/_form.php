@@ -31,7 +31,7 @@ $this->registerJsVar('isDirty', false);
         ?>
     </div>
 
-    <?= $form->field($model, 'title')->textInput() ?>
+    <?= $form->field($model, 'title')->textInput(['autocomplete' => "off"]) ?>
     <?= $form->field($model, 'content')->hiddenInput() ?>
     <div id="summerContent" style="height:500px" ><?= $model->content ?></div>
     <?= $form->field($model, 'chapter_id')->hiddenInput()->label(false) ?>
