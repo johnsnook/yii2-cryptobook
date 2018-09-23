@@ -11,11 +11,15 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "~2.0.0"
+        "yiisoft/yii2": "~2.0.0",
+	"defuse/php-encryption": "^2.2",
+        "yiisoft/yii2-jui": "~2.0.0",
+        "bower-asset/summernote": "*",
+        "bower-asset/jquery.idle": "*"
     },
     "autoload": {
         "psr-4": {
-            "johnsnook\\cryptobook\\": ""
+            "johnsnook\\cryptobook\\": "/src"
         }
     }
 }
